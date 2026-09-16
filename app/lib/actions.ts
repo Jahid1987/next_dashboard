@@ -7,6 +7,35 @@ import { redirect } from "next/navigation";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
+import { signIn, signOut } from "@/auth";
+import { AuthError } from "next-auth";
+
+// Authenticate user action
+
+export async function authenticate(
+  prevState: string | undefined,
+  formData: FormData,
+) {
+  try {
+    await signIn("credentials", formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Invalid credentials.";
+        default:
+          return "Something went wrong.";
+      }
+    }
+    throw error;
+  }
+}
+
+// Sign out user action
+export async function signOutUser() {
+  await signOut();
+}
+
 const FormShema = z.object({
   id: z.string(),
   customerId: z.string({
@@ -29,16 +58,15 @@ export type State = {
     status?: string[];
   };
   message?: string | null;
-  }
+};
 
 export async function createInvoice(prevState: State, formData: FormData) {
-  
   const validatedFields = CreateInvoice.safeParse({
     customerId: formData.get("customerId"),
     amount: formData.get("amount"),
     status: formData.get("status"),
   });
-  
+
   // console.log("Validated Fields:", validatedFields);
 
   if (!validatedFields.success) {
@@ -95,7 +123,6 @@ export async function updateInvoice(id: string, formData: FormData) {
 
 // delete invoice action
 export async function deleteInvoice(id: string) {
-  
   try {
     await sql`DELETE FROM invoices WHERE id = ${id}`;
   } catch (error) {

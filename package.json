@@ -10,10 +10,11 @@
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/forms": "^0.5.10",
     "autoprefixer": "10.4.20",
+    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
     "next": "latest",
-    "next-auth": "5.0.0-beta.25",
+    "next-auth": "5.0.0-beta.32",
     "postcss": "8.5.1",
     "postgres": "^3.4.6",
     "react": "latest",
@@ -23,7 +24,7 @@
     "use-debounce": "^10.0.6",
     "zod": "^3.25.17"
   },
-"devDependencies": {
+  "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/node": "22.10.7",
     "@types/react": "19.0.7",
